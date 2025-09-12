@@ -18,62 +18,9 @@ document.addEventListener("DOMContentLoaded", function() {
     };
 
     Promise.all([
-        loadPartial('#navbar', `${basePath}pages/navbar.html`),
         loadPartial('header', `${basePath}header.html`),
         loadPartial('footer', `${basePath}footer.html`)
     ]).then(() => {
-        // --- AFTER NAVBAR/HEADER/FOOTER ARE LOADED ---
-
-        // Initialize navbar functionality
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-        const dropdowns = document.querySelectorAll('.dropdown');
-
-        // Hamburger menu toggle
-        if (hamburger) {
-            hamburger.addEventListener('click', function() {
-                navLinks.classList.toggle('active');
-                
-                // Animate hamburger lines
-                const bars = hamburger.querySelectorAll('.bar');
-                if (navLinks.classList.contains('active')) {
-                    bars[0].style.transform = 'rotate(45deg) translate(6px, 6px)';
-                    bars[1].style.opacity = '0';
-                    bars[2].style.transform = 'rotate(-45deg) translate(6px, -6px)';
-                } else {
-                    bars[0].style.transform = 'none';
-                    bars[1].style.opacity = '1';
-                    bars[2].style.transform = 'none';
-                }
-            });
-        }
-
-        // Mobile dropdown functionality
-        dropdowns.forEach(dropdown => {
-            const dropbtn = dropdown.querySelector('.dropbtn');
-            if (dropbtn) {
-                dropbtn.addEventListener('click', function(e) {
-                    if (window.innerWidth <= 992) {
-                        e.preventDefault();
-                        dropdown.classList.toggle('active');
-                    }
-                });
-            }
-        });
-
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.navbar')) {
-                if (navLinks) navLinks.classList.remove('active');
-                const bars = hamburger?.querySelectorAll('.bar');
-                if (bars) {
-                    bars[0].style.transform = 'none';
-                    bars[1].style.opacity = '1';
-                    bars[2].style.transform = 'none';
-                }
-            }
-        });
-
         // --- AFTER HEADER/FOOTER ARE LOADED ---
 
         // Fix footer links based on current page location
@@ -104,6 +51,16 @@ document.addEventListener("DOMContentLoaded", function() {
                 img.setAttribute('src', `../${originalSrc}`);
             }
         });
+
+        // Hamburger Menu
+        const hamburgerButton = document.getElementById('hamburger-button');
+        const mainNav = document.getElementById('main-nav');
+        if (hamburgerButton && mainNav) {
+            hamburgerButton.addEventListener('click', () => {
+                mainNav.classList.toggle('nav-active');
+                hamburgerButton.setAttribute('aria-expanded', mainNav.classList.contains('nav-active'));
+            });
+        }
 
         // --- PAGE-SPECIFIC & DYNAMIC CONTENT ---
         const pagePath = window.location.pathname;
