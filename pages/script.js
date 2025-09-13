@@ -23,45 +23,58 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(html => {
                 navbarContainer.innerHTML = html;
                 
-                // Fix navbar paths for reverse proxy compatibility
+                // Universal path fixing for navbar (works with GitHub Pages and Reverse Proxy)
                 const currentPath = window.location.pathname;
                 
-                // Calculate how many levels deep we are from the root
-                let basePrefix = '';
+                // Extract just the path portion after the domain
+                const pathSegments = currentPath.split('/').filter(segment => segment && !segment.endsWith('.html'));
                 
-                // Check if we're in a subdirectory deployment (like /stc/pages/)
-                const pathParts = currentPath.split('/').filter(part => part !== '');
+                // Find where 'pages' directory is in the path
+                const pagesIndex = pathSegments.findIndex(segment => segment === 'pages');
                 
-                // If path has more than 1 part before pages, we're in a subdirectory
-                let pagesIndex = -1;
-                for (let i = 0; i < pathParts.length; i++) {
-                    if (pathParts[i] === 'pages') {
-                        pagesIndex = i;
-                        break;
-                    }
-                }
+                let pathToRoot = '../'; // Default: one level up from pages directory
                 
                 if (pagesIndex > 0) {
-                    // We're in a subdirectory like /stc/pages/, need extra ../
-                    basePrefix = '../'.repeat(pagesIndex);
+                    // If pages is not at the root level, we need additional '../' for each level above it
+                    pathToRoot = '../'.repeat(pagesIndex + 1);
                 }
                 
-                // Fix all navbar links with data-navbar-link attribute
+                console.log('Path calculation:', {
+                    currentPath,
+                    pathSegments,
+                    pagesIndex,
+                    pathToRoot
+                });
+                
+                // Fix all navbar links
                 const navbarLinks = navbarContainer.querySelectorAll('a[data-navbar-link]');
                 navbarLinks.forEach(link => {
                     const originalHref = link.getAttribute('data-navbar-link');
                     if (originalHref && !originalHref.startsWith('http')) {
-                        const newHref = basePrefix + originalHref;
+                        let newHref;
+                        if (originalHref.startsWith('../')) {
+                            // Replace the single '../' with the calculated path to root
+                            newHref = pathToRoot + originalHref.substring(3);
+                        } else {
+                            // Same-level links stay as they are
+                            newHref = originalHref;
+                        }
                         link.setAttribute('href', newHref);
                     }
                 });
                 
-                // Fix navbar images with data-navbar-img attribute
+                // Fix navbar images
                 const navbarImages = navbarContainer.querySelectorAll('img[data-navbar-img]');
                 navbarImages.forEach(img => {
                     const originalSrc = img.getAttribute('data-navbar-img');
                     if (originalSrc && !originalSrc.startsWith('http')) {
-                        const newSrc = basePrefix + originalSrc;
+                        let newSrc;
+                        if (originalSrc.startsWith('../')) {
+                            // Replace the single '../' with the calculated path to root
+                            newSrc = pathToRoot + originalSrc.substring(3);
+                        } else {
+                            newSrc = originalSrc;
+                        }
                         img.setAttribute('src', newSrc);
                     }
                 });
