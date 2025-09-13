@@ -1,64 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script>
-    (function() {
-        const currentPath = window.location.pathname;
-        const currentHost = window.location.host;
-        
-        // Specific detection for different deployments
-        const isSTCDomain = currentHost === "students.iisertvm.ac.in" && currentPath.startsWith("/stc/");
-        const isGitHubPages = currentHost.includes("github.io");
-        const isSubdirectoryDeployment = currentPath.includes("/STC_IISERTVM/");
-        
-        // Determine the base path based on deployment
-        let siteBasePath = "/";
-        if (isSTCDomain) {
-            siteBasePath = "/stc/";
-        } else if (isSubdirectoryDeployment) {
-            siteBasePath = "/STC_IISERTVM/";
-        }
-        
-        function fixPath(originalPath) {
-            if (!originalPath || originalPath.startsWith("http://") || originalPath.startsWith("https://") || originalPath.startsWith("//")) {
-                return originalPath;
-            }
-            
-            if (originalPath.startsWith("../")) {
-                if (isSTCDomain || isSubdirectoryDeployment) {
-                    const relativePath = originalPath.substring(3);
-                    return siteBasePath + relativePath;
-                } else {
-                    return originalPath;
-                }
-            } else if (originalPath.startsWith("./") || (!originalPath.startsWith("/") && !originalPath.includes(":"))) {
-                if (isSTCDomain || isSubdirectoryDeployment) {
-                    const cleanPath = originalPath.replace("./", "");
-                    return siteBasePath + "pages/" + cleanPath;
-                } else {
-                    return originalPath;
-                }
-            }
-            
-            return originalPath;
-        }
-        
-        window.writeFixedCSS = function(originalPath) {
-            const newPath = fixPath(originalPath);
-            document.write('<link rel="stylesheet" href="' + newPath + '">');
-        };
-        
-        window.writeFixedJS = function(originalPath) {
-            const newPath = fixPath(originalPath);
-            document.write('<script src="' + newPath + '"><\/script>');
-        };
-    })();
-    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FAQ - STC IISER TVM</title>
-    <script>writeFixedCSS("../css/style.css");</script>
-    <script>writeFixedCSS("navbar.css");</script>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="navbar.css">
 </head>
 <body>
     <!-- navbar-->
@@ -106,8 +53,8 @@
         <!-- Footer content is loaded dynamically by js/script.js -->
     </footer>
 
-    <script>writeFixedJS("../js/data.js");</script>
-    <script>writeFixedJS("../js/script.js");</script>
-    <script>writeFixedJS("../js/faq.js");</script>
+    <script src="../js/data.js"></script>
+    <script src="../js/script.js"></script>
+    <script src="../js/faq.js"></script>
 </body>
 </html>

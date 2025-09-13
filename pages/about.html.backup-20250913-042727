@@ -1,65 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script>
-    (function() {
-        const currentPath = window.location.pathname;
-        const currentHost = window.location.host;
-        
-        // Specific detection for different deployments
-        const isSTCDomain = currentHost === "students.iisertvm.ac.in" && currentPath.startsWith("/stc/");
-        const isGitHubPages = currentHost.includes("github.io");
-        const isSubdirectoryDeployment = currentPath.includes("/STC_IISERTVM/");
-        
-        // Determine the base path based on deployment
-        let siteBasePath = "/";
-        if (isSTCDomain) {
-            siteBasePath = "/stc/";
-        } else if (isSubdirectoryDeployment) {
-            siteBasePath = "/STC_IISERTVM/";
-        }
-        
-        function fixPath(originalPath) {
-            if (!originalPath || originalPath.startsWith("http://") || originalPath.startsWith("https://") || originalPath.startsWith("//")) {
-                return originalPath;
-            }
-            
-            if (originalPath.startsWith("../")) {
-                if (isSTCDomain || isSubdirectoryDeployment) {
-                    const relativePath = originalPath.substring(3);
-                    return siteBasePath + relativePath;
-                } else {
-                    return originalPath;
-                }
-            } else if (originalPath.startsWith("./") || (!originalPath.startsWith("/") && !originalPath.includes(":"))) {
-                if (isSTCDomain || isSubdirectoryDeployment) {
-                    const cleanPath = originalPath.replace("./", "");
-                    return siteBasePath + "pages/" + cleanPath;
-                } else {
-                    return originalPath;
-                }
-            }
-            
-            return originalPath;
-        }
-        
-        window.writeFixedCSS = function(originalPath) {
-            const newPath = fixPath(originalPath);
-            document.write('<link rel="stylesheet" href="' + newPath + '">');
-        };
-        
-        window.writeFixedJS = function(originalPath) {
-            const newPath = fixPath(originalPath);
-            document.write('<script src="' + newPath + '"><\/script>');
-        };
-    })();
-    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About - STC IISER TVM</title>
     
     <!-- Universal path fixer for reverse proxy compatibility -->
-    
+    <script>
+    (function() {
+        'use strict';
+        
+        // Detect site base path for reverse proxy compatibility
+        const currentPath = window.location.pathname;
+        let siteBasePath = '';
+        
+        if (currentPath.includes('/pages/')) {
+            const beforePages = currentPath.split('/pages/')[0];
+            siteBasePath = beforePages === '' ? '' : beforePages;
+        }
+        
+        const isSubdirectory = siteBasePath !== '';
+        
+        // Function to fix a relative path
+        function fixPath(originalPath) {
+            if (!originalPath || originalPath.startsWith('http') || !originalPath.startsWith('../')) {
+                return originalPath;
+            }
+            
+            if (isSubdirectory) {
+                const relativePath = originalPath.substring(3); // Remove '../'
+                return siteBasePath + '/' + relativePath;
+            }
+            
+            return originalPath;
+        }
+        
+        // Helper functions for HTML document.write
+        window.writeFixedCSS = function(originalPath) {
+            const newPath = fixPath(originalPath);
+            document.write('<link rel="stylesheet" href="' + newPath + '">');
+            console.log('CSS:', originalPath, '->', newPath);
+        };
+        
+        window.writeFixedJS = function(originalPath) {
+            const newPath = fixPath(originalPath);
+            document.write('<script src="' + newPath + '"><\/script>');
+            console.log('JS:', originalPath, '->', newPath);
+        };
+        
+        console.log('Path fixer loaded, subdirectory:', isSubdirectory, 'base:', siteBasePath);
+    })();
+    </script>
     
     <script>writeFixedCSS('../css/style.css');</script>
     <script>writeFixedCSS('navbar.css');</script>
@@ -144,6 +135,6 @@ The STC was established to serve as a central platform that connects the diverse
     <script>writeFixedJS('../js/script.js');</script>
     <script>writeFixedJS('../js/mobile-enhancements.js');</script>
     <script>writeFixedJS('../js/faq.js');</script>
-    <script>writeFixedJS("script.js");</script>
+    <script src="script.js"></script>
 </body>
 </html>

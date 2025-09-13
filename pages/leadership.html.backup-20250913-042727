@@ -1,70 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script>
-    (function() {
-        const currentPath = window.location.pathname;
-        const currentHost = window.location.host;
-        
-        // Specific detection for different deployments
-        const isSTCDomain = currentHost === "students.iisertvm.ac.in" && currentPath.startsWith("/stc/");
-        const isGitHubPages = currentHost.includes("github.io");
-        const isSubdirectoryDeployment = currentPath.includes("/STC_IISERTVM/");
-        
-        // Determine the base path based on deployment
-        let siteBasePath = "/";
-        if (isSTCDomain) {
-            siteBasePath = "/stc/";
-        } else if (isSubdirectoryDeployment) {
-            siteBasePath = "/STC_IISERTVM/";
-        }
-        
-        function fixPath(originalPath) {
-            if (!originalPath || originalPath.startsWith("http://") || originalPath.startsWith("https://") || originalPath.startsWith("//")) {
-                return originalPath;
-            }
-            
-            if (originalPath.startsWith("../")) {
-                if (isSTCDomain || isSubdirectoryDeployment) {
-                    const relativePath = originalPath.substring(3);
-                    return siteBasePath + relativePath;
-                } else {
-                    return originalPath;
-                }
-            } else if (originalPath.startsWith("./") || (!originalPath.startsWith("/") && !originalPath.includes(":"))) {
-                if (isSTCDomain || isSubdirectoryDeployment) {
-                    const cleanPath = originalPath.replace("./", "");
-                    return siteBasePath + "pages/" + cleanPath;
-                } else {
-                    return originalPath;
-                }
-            }
-            
-            return originalPath;
-        }
-        
-        window.writeFixedCSS = function(originalPath) {
-            const newPath = fixPath(originalPath);
-            document.write('<link rel="stylesheet" href="' + newPath + '">');
-        };
-        
-        window.writeFixedJS = function(originalPath) {
-            const newPath = fixPath(originalPath);
-            document.write('<script src="' + newPath + '"><\/script>');
-        };
-    })();
-    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Leadership - STC IISER TVM</title>
     
     <!-- Universal path fixer for reverse proxy compatibility -->
-    
+    <script>
+    (function() {
+        'use strict';
+        
+        // Detect site base path for reverse proxy compatibility
+        const currentPath = window.location.pathname;
+        let siteBasePath = '';
+        
+        if (currentPath.includes('/pages/')) {
+            const beforePages = currentPath.split('/pages/')[0];
+            siteBasePath = beforePages === '' ? '' : beforePages;
+        }
+        
+        // Only proceed if we detected a base path (meaning we're in a subdirectory)
+        if (siteBasePath) {
+            console.log('Path fixer: Detected subdirectory deployment, base path:', siteBasePath);
+            
+            // Function to write CSS with corrected paths
+            window.writeFixedCSS = function(originalPath) {
+                const newPath = siteBasePath + '/' + originalPath.substring(3); // Remove '../' and add base
+                document.write('<link rel="stylesheet" href="' + newPath + '">');
+                console.log(`Fixed CSS: ${originalPath} -> ${newPath}`);
+            };
+            
+            window.writeFixedJS = function(originalPath) {
+                const newPath = siteBasePath + '/' + originalPath.substring(3); // Remove '../' and add base  
+                document.write('<script src="' + newPath + '"><\/script>');
+                console.log(`Fixed JS: ${originalPath} -> ${newPath}`);
+            };
+        } else {
+            console.log('Path fixer: Standard deployment detected, no path fixes needed');
+            
+            // Fallback functions for standard deployment
+            window.writeFixedCSS = function(originalPath) {
+                document.write('<link rel="stylesheet" href="' + originalPath + '">');
+            };
+            
+            window.writeFixedJS = function(originalPath) {
+                document.write('<script src="' + originalPath + '"><\/script>');
+            };
+        }
+    })();
+    </script>
     
     <script>writeFixedCSS('../css/style.css');</script>
     <script>writeFixedCSS('navbar.css');</script>
     <script>writeFixedCSS('../css/mobile.css');</script>
-    <script>writeFixedCSS("leadership_style.css");</script>
+    <link rel="stylesheet" href="leadership_style.css">
 </head>
 <body>
     <!-- navbar-->
@@ -224,6 +213,6 @@
 
     <script>writeFixedJS('../js/script.js');</script>
     <script>writeFixedJS('../js/mobile-enhancements.js');</script>
-    <script>writeFixedJS("script.js");</script>
+    <script src="script.js"></script>
 </body>
 </html>

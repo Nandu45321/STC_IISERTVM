@@ -126,3 +126,59 @@
     console.log('🔧 Path fixer configured for deployment:', isSTCDomain ? 'STC Domain' : isGitHubPages ? 'GitHub Pages' : isSubdirectoryDeployment ? 'Subdirectory' : 'Root');
     
 })();
+        
+        // Fix script sources
+        const scripts = document.querySelectorAll('script[src^="../"]');
+        scripts.forEach(script => {
+            const originalSrc = script.getAttribute('src');
+            const newSrc = fixPath(originalSrc);
+            if (newSrc !== originalSrc) {
+                script.setAttribute('src', newSrc);
+                console.log(`✅ Fixed JS: ${originalSrc} -> ${newSrc}`);
+            }
+        });
+        
+        // Fix image sources
+        const images = document.querySelectorAll('img[src^="../"]');
+        images.forEach(img => {
+            const originalSrc = img.getAttribute('src');
+            const newSrc = fixPath(originalSrc);
+            if (newSrc !== originalSrc) {
+                img.setAttribute('src', newSrc);
+                console.log(`✅ Fixed IMG: ${originalSrc} -> ${newSrc}`);
+            }
+        });
+    }
+    
+    // Helper functions for HTML document.write (for use in head section)
+    window.writeFixedCSS = function(originalPath) {
+        const newPath = fixPath(originalPath);
+        document.write('<link rel="stylesheet" href="' + newPath + '">');
+        if (newPath !== originalPath) {
+            console.log(`✅ Wrote CSS: ${originalPath} -> ${newPath}`);
+        }
+    };
+    
+    window.writeFixedJS = function(originalPath) {
+        const newPath = fixPath(originalPath);
+        document.write('<script src="' + newPath + '"><\/script>');
+        if (newPath !== originalPath) {
+            console.log(`✅ Wrote JS: ${originalPath} -> ${newPath}`);
+        }
+    };
+    
+    // Fix paths when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', fixExistingPaths);
+    } else {
+        fixExistingPaths();
+    }
+    
+    // Also try to fix paths immediately for early-loaded elements
+    if (document.head) {
+        fixExistingPaths();
+    }
+    
+    console.log('🚀 Path fixer initialized');
+    
+})();
