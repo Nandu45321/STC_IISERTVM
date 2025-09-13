@@ -13,14 +13,31 @@ document.addEventListener('DOMContentLoaded', function() {
     // Dynamically load navbar.html into #navbar
     const navbarContainer = document.getElementById('navbar');
     if (navbarContainer) {
-        fetch('navbar.html')
+        // Calculate correct path to navbar.html
+        const currentPath = window.location.pathname;
+        let navbarPath = 'navbar.html'; // Default for standard deployment
+        
+        // For reverse proxy deployments, we might need to adjust the path
+        if (currentPath.includes('/pages/')) {
+            const beforePages = currentPath.split('/pages/')[0];
+            if (beforePages && beforePages !== '') {
+                // We're in a subdirectory, navbar.html should still be in the same pages directory
+                navbarPath = 'navbar.html'; // Keep it relative to current pages directory
+            }
+        }
+        
+        console.log('Loading navbar from:', navbarPath);
+        
+        fetch(navbarPath)
             .then(response => {
                 if (!response.ok) {
+                    console.error('Failed to load navbar:', response.status, response.statusText);
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 return response.text();
             })
             .then(html => {
+                console.log('Navbar HTML loaded successfully');
                 navbarContainer.innerHTML = html;
                 
                 // Simple and reliable path fixing
