@@ -3,10 +3,11 @@ document.addEventListener("DOMContentLoaded", function() {
     // Fix CSS and JS paths that are loaded with relative URLs
     
     const currentPath = window.location.pathname;
+    const isPagesDirectory = currentPath.includes('/pages/');
     let siteBasePath = '/';
     
     // Detect site base path for reverse proxy deployments
-    if (currentPath.includes('/pages/')) {
+    if (isPagesDirectory) {
         const beforePages = currentPath.split('/pages/')[0];
         siteBasePath = beforePages === '' ? '/' : beforePages + '/';
     }

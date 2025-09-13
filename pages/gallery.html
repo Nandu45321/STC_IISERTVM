@@ -53,6 +53,13 @@
             const newPath = fixPath(originalPath);
             document.write('<script src="' + newPath + '"><\/script>');
         };
+        
+        window.writeFixedImg = function(originalPath, altText, className = '', id = '') {
+            const newPath = fixPath(originalPath);
+            const classAttr = className ? ' class="' + className + '"' : '';
+            const idAttr = id ? ' id="' + id + '"' : '';
+            document.write('<img src="' + newPath + '" alt="' + altText + '"' + classAttr + idAttr + '>');
+        };
     })();
     </script>
     <meta charset="UTF-8">
@@ -88,255 +95,119 @@
             <div class="gallery-container">
                 <!-- Anvesha Events -->
                 <div class="gallery-item-full" data-category="anvesha">
-                    <img src="../images/gallery/Events/Anvesha/Inauguration/img1.webp"
-                         alt="Anvesha Inauguration Ceremony" 
-                         loading="lazy" 
-                         decoding="async"
-                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+                    <script>writeFixedImg('../images/gallery/Events/Anvesha/Inauguration/img1.webp', 'Anvesha Inauguration Ceremony');</script>
                 </div>
                 <div class="gallery-item-full" data-category="anvesha">
-                    <img src="../images/gallery/Events/Anvesha/Inauguration/img2.webp"
-                         alt="Anvesha Inauguration" 
-                         loading="lazy" 
-                         decoding="async"
-                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+                    <script>writeFixedImg('../images/gallery/Events/Anvesha/Inauguration/img2.webp', 'Anvesha Inauguration');</script>
                 </div>
                 <div class="gallery-item-full" data-category="anvesha">
-                    <img src="../images/gallery/Events/Anvesha/Afficionados/img1.webp"
-                         alt="Anvesha Afficionados Competition" 
-                         loading="lazy" 
-                         decoding="async"
-                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+                    <script>writeFixedImg('../images/gallery/Events/Anvesha/Afficionados/img1.webp', 'Anvesha Afficionados Competition');</script>
                 </div>
                 <div class="gallery-item-full" data-category="anvesha">
-                    <img src="../images/gallery/Events/Anvesha/Afficionados/img2.webp"
-                         alt="Afficionados Event" 
-                         loading="lazy" 
-                         decoding="async"
-                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+                    <script>writeFixedImg('../images/gallery/Events/Anvesha/Afficionados/img2.webp', 'Afficionados Event');</script>
                 </div>
                 <div class="gallery-item-full" data-category="anvesha">
-                    <img src="../images/gallery/Events/Anvesha/Afficionados/img3.webp"
-                         alt="Afficionados Competition" 
-                         loading="lazy" 
-                         decoding="async"
-                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+                    <script>writeFixedImg('../images/gallery/Events/Anvesha/Afficionados/img3.webp', 'Afficionados Competition');</script>
                 </div>
                 <div class="gallery-item-full" data-category="anvesha">
-                    <img src="../images/gallery/Events/Anvesha/Afficionados/img4.webp"
-                         alt="Students at Afficionados" 
-                         loading="lazy" 
-                         decoding="async"
-                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+                    <script>writeFixedImg('../images/gallery/Events/Anvesha/Afficionados/img4.webp', 'Students at Afficionados');</script>
                 </div>
                 <div class="gallery-item-full" data-category="anvesha">
-                    <img src="../images/gallery/Events/Anvesha/Afficionados/img5.webp"
-                         alt="Afficionados Winners" 
-                         loading="lazy" 
-                         decoding="async"
-                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+                    <script>writeFixedImg('../images/gallery/Events/Anvesha/Afficionados/img5.webp', 'Afficionados Winners');</script>
                 </div>
                 <div class="gallery-item-full" data-category="anvesha">
-                    <img src="../images/gallery/Events/Anvesha/Afficionados/img6.webp"
-                         alt="Afficionados Award Ceremony" 
-                         loading="lazy" 
-                         decoding="async"
-                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+                    <script>writeFixedImg('../images/gallery/Events/Anvesha/Afficionados/img6.webp', 'Afficionados Award Ceremony');</script>
                 </div>
                 <div class="gallery-item-full" data-category="anvesha">
-                    <img src="../images/gallery/Events/Anvesha/Afficionados/img7.webp"
-                         alt="Afficionados Group Photo" 
-                         loading="lazy" 
-                         decoding="async"
-                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+                    <script>writeFixedImg('../images/gallery/Events/Anvesha/Afficionados/img7.webp', 'Afficionados Group Photo');</script>
                 </div>
 
                 <div class="gallery-item-full" data-category="anvesha">
-                    <img src="../images/gallery/Events/Anvesha/BahFest/img1.webp"
-                         alt="BahFest Presentation" 
-                         loading="lazy" 
-                         decoding="async"
-                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+                    <script>writeFixedImg('../images/gallery/Events/Anvesha/BahFest/img1.webp', 'BahFest Presentation');</script>
                 </div>
 
                 <div class="gallery-item-full" data-category="anvesha">
-                    <img src="../images/gallery/Events/Anvesha/Blackbox/img1.webp"
-                         alt="Blackbox Competition" 
-                         loading="lazy" 
-                         decoding="async"
-                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+                    <script>writeFixedImg('../images/gallery/Events/Anvesha/Blackbox/img1.webp', 'Blackbox Competition');</script>
                 </div>
                 <div class="gallery-item-full" data-category="anvesha">
-                    <img src="../images/gallery/Events/Anvesha/Blackbox/img2.webp"
-                         alt="Blackbox Event" 
-                         loading="lazy" 
-                         decoding="async"
-                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+                    <script>writeFixedImg('../images/gallery/Events/Anvesha/Blackbox/img2.webp', 'Blackbox Event');</script>
                 </div>
 
                 <div class="gallery-item-full" data-category="anvesha">
-                    <img src="../images/gallery/Events/Anvesha/Blender Workshop/img1.webp"
-                         alt="Blender Workshop Session" 
-                         loading="lazy" 
-                         decoding="async"
-                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+                    <script>writeFixedImg('../images/gallery/Events/Anvesha/Blender Workshop/img1.webp', 'Blender Workshop Session');</script>
                 </div>
                 <div class="gallery-item-full" data-category="anvesha">
-                    <img src="../images/gallery/Events/Anvesha/Blender Workshop/img2.webp"
-                         alt="Blender Workshop Participants" 
-                         loading="lazy" 
-                         decoding="async"
-                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+                    <script>writeFixedImg('../images/gallery/Events/Anvesha/Blender Workshop/img2.webp', 'Blender Workshop Participants');</script>
                 </div>
 
                 <div class="gallery-item-full" data-category="anvesha">
-                    <img src="../images/gallery/Events/Anvesha/Entanglement/img1.webp"
-                         alt="Entanglement Event" 
-                         loading="lazy" 
-                         decoding="async"
-                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+                    <script>writeFixedImg('../images/gallery/Events/Anvesha/Entanglement/img1.webp', 'Entanglement Event');</script>
                 </div>
                 <div class="gallery-item-full" data-category="anvesha">
-                    <img src="../images/gallery/Events/Anvesha/Entanglement/img2.webp"
-                         alt="Entanglement Competition" 
-                         loading="lazy" 
-                         decoding="async"
-                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+                    <script>writeFixedImg('../images/gallery/Events/Anvesha/Entanglement/img2.webp', 'Entanglement Competition');</script>
                 </div>
                 <div class="gallery-item-full" data-category="anvesha">
-                    <img src="../images/gallery/Events/Anvesha/Entanglement/img3.webp"
-                         alt="Entanglement Participants" 
-                         loading="lazy" 
-                         decoding="async"
-                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+                    <script>writeFixedImg('../images/gallery/Events/Anvesha/Entanglement/img3.webp', 'Entanglement Participants');</script>
                 </div>
 
                 <div class="gallery-item-full" data-category="anvesha">
-                    <img src="../images/gallery/Events/Anvesha/Jigyasa/img1.webp"
-                         alt="Jigyasa Event" 
-                         loading="lazy" 
-                         decoding="async"
-                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+                    <script>writeFixedImg('../images/gallery/Events/Anvesha/Jigyasa/img1.webp', 'Jigyasa Event');</script>
                 </div>
                 <div class="gallery-item-full" data-category="anvesha">
-                    <img src="../images/gallery/Events/Anvesha/Utsuk/img1.webp"
-                         alt="Utsuk Competition" 
-                         loading="lazy" 
-                         decoding="async"
-                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+                    <script>writeFixedImg('../images/gallery/Events/Anvesha/Utsuk/img1.webp', 'Utsuk Competition');</script>
                 </div>
 
                 <!-- Crucible Events -->
                 <div class="gallery-item-full" data-category="crucible">
-                    <img src="../images/gallery/Events/Crucible/img6.webp" 
-                         alt="Crucible Optics Workshop" 
-                         loading="lazy" 
-                         decoding="async"
-                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+                    <script>writeFixedImg('../images/gallery/Events/Crucible/img6.webp', 'Crucible Optics Workshop');</script>
                 </div>
                 <div class="gallery-item-full" data-category="crucible">
-                    <img src="../images/gallery/Events/Crucible/img5.webp" 
-                         alt="Optics Experiment" 
-                         loading="lazy" 
-                         decoding="async"
-                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+                    <script>writeFixedImg('../images/gallery/Events/Crucible/img5.webp', 'Optics Experiment');</script>
                 </div>
                 <div class="gallery-item-full" data-category="crucible">
-                    <img src="../images/gallery/Events/Crucible/img4.webp" 
-                         alt="Chladni Pattern Experiment" 
-                         loading="lazy" 
-                         decoding="async"
-                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+                    <script>writeFixedImg('../images/gallery/Events/Crucible/img4.webp', 'Chladni Pattern Experiment');</script>
                 </div>
                 <div class="gallery-item-full" data-category="crucible">
-                    <img src="../images/gallery/Events/Crucible/img3.webp" 
-                         alt="Synchrony Workshop" 
-                         loading="lazy" 
-                         decoding="async"
-                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+                    <script>writeFixedImg('../images/gallery/Events/Crucible/img3.webp', 'Synchrony Workshop');</script>
                 </div>
                 <div class="gallery-item-full" data-category="crucible">
-                    <img src="../images/gallery/Events/Crucible/img1.webp" 
-                         alt="Crucible Physics Demo" 
-                         loading="lazy" 
-                         decoding="async"
-                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+                    <script>writeFixedImg('../images/gallery/Events/Crucible/img1.webp', 'Crucible Physics Demo');</script>
                 </div>
                 <div class="gallery-item-full" data-category="crucible">
-                    <img src="../images/gallery/Events/Crucible/img2.webp" 
-                         alt="Crucible Workshop Setup" 
-                         loading="lazy" 
-                         decoding="async"
-                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+                    <script>writeFixedImg('../images/gallery/Events/Crucible/img2.webp', 'Crucible Workshop Setup');</script>
                 </div>
 
                 <!-- National Science Day -->
                 <div class="gallery-item-full" data-category="national-science-day">
-                    <img src="../images/gallery/Events/National Science Day/img1.webp" 
-                         alt="National Science Day Celebration" 
-                         loading="lazy" 
-                         decoding="async"
-                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+                    <script>writeFixedImg('../images/gallery/Events/National Science Day/img1.webp', 'National Science Day Celebration');</script>
                 </div>
                 <div class="gallery-item-full" data-category="national-science-day">
-                    <img src="../images/gallery/Events/National Science Day/img2.webp" 
-                         alt="Science Day Event" 
-                         loading="lazy" 
-                         decoding="async"
-                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+                    <script>writeFixedImg('../images/gallery/Events/National Science Day/img2.webp', 'Science Day Event');</script>
                 </div>
                 <div class="gallery-item-full" data-category="national-science-day">
-                    <img src="../images/gallery/Events/National Science Day/img3.webp" 
-                         alt="National Science Day Awards" 
-                         loading="lazy" 
-                         decoding="async"
-                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+                    <script>writeFixedImg('../images/gallery/Events/National Science Day/img3.webp', 'National Science Day Awards');</script>
                 </div>
                 <div class="gallery-item-full" data-category="national-science-day">
-                    <img src="../images/gallery/Events/National Science Day/img4.webp" 
-                         alt="Science Day Participants" 
-                         loading="lazy" 
-                         decoding="async"
-                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+                    <script>writeFixedImg('../images/gallery/Events/National Science Day/img4.webp', 'Science Day Participants');</script>
                 </div>
                 <div class="gallery-item-full" data-category="national-science-day">
-                    <img src="../images/gallery/Events/National Science Day/img5.webp" 
-                         alt="Science Day Ceremony" 
-                         loading="lazy" 
-                         decoding="async"
-                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+                    <script>writeFixedImg('../images/gallery/Events/National Science Day/img5.webp', 'Science Day Ceremony');</script>
                 </div>
                 <div class="gallery-item-full" data-category="national-science-day">
-                    <img src="../images/gallery/Events/National Science Day/img6.webp"
-                         alt="National Science Day Group" 
-                         loading="lazy" 
-                         decoding="async"
-                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+                    <script>writeFixedImg('../images/gallery/Events/National Science Day/img6.webp', 'National Science Day Group');</script>
                 </div>
 
                 <!-- Panel Discussion -->
                 <div class="gallery-item-full" data-category="panel-discussion">
-                    <img src="../images/gallery/Events/Panel Discussion/img1.webp" 
-                         alt="Expert Panel Discussion" 
-                         loading="lazy" 
-                         decoding="async"
-                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+                    <script>writeFixedImg('../images/gallery/Events/Panel Discussion/img1.webp', 'Expert Panel Discussion');</script>
                 </div>
 
                 <!-- Cafe Scientifique -->
                 <div class="gallery-item-full" data-category="cafe-scientifique">
-                    <img src="../images/gallery/Events/Cafe Scientifique/img1.webp" 
-                         alt="Cafe Scientifique Discussion" 
-                         loading="lazy" 
-                         decoding="async"
-                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+                    <script>writeFixedImg('../images/gallery/Events/Cafe Scientifique/img1.webp', 'Cafe Scientifique Discussion');</script>
                 </div>
                 <div class="gallery-item-full" data-category="cafe-scientifique">
-                    <img src="../images/gallery/Events/Cafe Scientifique/img2.webp" 
-                         alt="Cafe Scientifique Session" 
-                         loading="lazy" 
-                         decoding="async"
-                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw">
+                    <script>writeFixedImg('../images/gallery/Events/Cafe Scientifique/img2.webp', 'Cafe Scientifique Session');</script>
                 </div>
             </div>
         </section>
@@ -360,7 +231,20 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('../gallery-sw.js')
+                // Use the same path fixing logic as other resources
+                const currentHost = window.location.host;
+                const currentPath = window.location.pathname;
+                const isSTCDomain = currentHost === "students.iisertvm.ac.in" && currentPath.startsWith("/stc/");
+                const isSubdirectoryDeployment = currentPath.includes("/STC_IISERTVM/");
+                
+                let swPath = '../gallery-sw.js'; // Default path
+                if (isSTCDomain) {
+                    swPath = '/stc/gallery-sw.js';
+                } else if (isSubdirectoryDeployment) {
+                    swPath = '/STC_IISERTVM/gallery-sw.js';
+                }
+                
+                navigator.serviceWorker.register(swPath)
                     .then(registration => {
                         console.log('SW registered: ', registration);
                         
