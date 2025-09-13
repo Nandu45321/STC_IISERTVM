@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", function() {
         // Fix image paths
         document.querySelectorAll('img').forEach(img => {
             const originalSrc = img.getAttribute('src');
-            if (isPagesDirectory && !originalSrc.startsWith('http') && !originalSrc.startsWith('../')) {
+            if (originalSrc && isPagesDirectory && !originalSrc.startsWith('http') && !originalSrc.startsWith('../')) {
                 img.setAttribute('src', `../${originalSrc}`);
             }
         });
