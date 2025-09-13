@@ -53,16 +53,24 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const loadPartial = (selector, url) => {
         const element = document.querySelector(selector);
+        console.log(`Loading partial: ${selector} from ${url}`);
+        console.log(`Target element found:`, element);
         if (!element) {
+            console.warn(`Element with selector '${selector}' not found`);
             return Promise.resolve(); // Return resolved promise if element doesn't exist
         }
         return fetch(url)
             .then(response => {
+                console.log(`Fetch response for ${url}:`, response.status, response.ok);
                 if (!response.ok) throw new Error(`Could not load ${url}`);
                 return response.text();
             })
             .then(data => {
+                console.log(`Loaded content for ${selector}:`, data.substring(0, 100) + '...');
                 element.innerHTML = data;
+            })
+            .catch(error => {
+                console.error(`Error loading ${selector} from ${url}:`, error);
             });
     };
 
@@ -71,10 +79,15 @@ document.addEventListener("DOMContentLoaded", function() {
         loadPartial('footer', `${basePath}footer.html`)
     ]).then(() => {
         // --- AFTER HEADER/FOOTER ARE LOADED ---
+        console.log('Header and footer loaded successfully');
+        console.log('Footer element content:', document.querySelector('footer').innerHTML);
 
         // Fix footer links based on current page location
         const footerHomeLinks = document.querySelectorAll('.footer-link-home');
         const footerPageLinks = document.querySelectorAll('.footer-link-pages');
+        
+        console.log('Found footer home links:', footerHomeLinks.length);
+        console.log('Found footer page links:', footerPageLinks.length);
         
         footerHomeLinks.forEach(link => {
             if (!isPagesDirectory) {
@@ -110,10 +123,12 @@ document.addEventListener("DOMContentLoaded", function() {
             // If we're on the root page, keep the original paths
         });
 
-        // Fix image paths
+        // Fix image paths only for relative paths that need fixing
         document.querySelectorAll('img').forEach(img => {
             const originalSrc = img.getAttribute('src');
-            if (originalSrc && isPagesDirectory && !originalSrc.startsWith('http') && !originalSrc.startsWith('../')) {
+            // Only fix relative paths that don't start with ../ and are not already absolute
+            if (originalSrc && isPagesDirectory && !originalSrc.startsWith('http') && 
+                !originalSrc.startsWith('../') && !originalSrc.startsWith('/')) {
                 img.setAttribute('src', `../${originalSrc}`);
             }
         });
