@@ -65,10 +65,90 @@
     <script>writeFixedCSS('navbar.css');</script>
     <script>writeFixedCSS('../css/mobile.css');</script>
     <script>writeFixedCSS("leadership_style.css");</script>
+    
+    <style>
+    /* Deployment Links Responsive Styles */
+    .deployment-links {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 8px 0;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .deployment-links .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+        padding: 0 15px;
+    }
+    
+    .deployment-links a, .deployment-links button {
+        color: white;
+        text-decoration: none;
+        padding: 6px 16px;
+        background: rgba(255,255,255,0.2);
+        border-radius: 20px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255,255,255,0.3);
+        white-space: nowrap;
+        cursor: pointer;
+    }
+    
+    .deployment-links a:hover, .deployment-links button:hover {
+        background: rgba(255,255,255,0.3);
+        transform: translateY(-1px);
+        text-decoration: none;
+    }
+    
+    @media (max-width: 768px) {
+        .deployment-links .container {
+            gap: 10px;
+        }
+        
+        .deployment-links a, .deployment-links button {
+            font-size: 12px;
+            padding: 5px 12px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .deployment-links .container {
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .deployment-links a, .deployment-links button {
+            min-width: 200px;
+            text-align: center;
+        }
+    }
+    </style>
 </head>
 <body>
     <!-- navbar-->
      <div id="navbar"> </div>
+
+    <!-- Deployment Links Section -->
+    <div class="deployment-links">
+        <div class="container">
+            <a href="https://coding-club-of-iiser-thiruvananthapuram.github.io/STC_IISERTVM/pages/leadership.html" 
+               target="_blank" 
+               class="deployment-link github-link">
+                📚 GitHub Pages Version
+            </a>
+            <a href="https://students.iisertvm.ac.in/stc/pages/leadership.html" 
+               target="_blank"
+               class="deployment-link stc-link">
+                🏫 STC Reverse Proxy Version
+            </a>
+        </div>
+    </div>
 
     <main>
         <section class="page-header">
@@ -225,5 +305,63 @@
     <script>writeFixedJS('../js/script.js');</script>
     <script>writeFixedJS('../js/mobile-enhancements.js');</script>
     <script>writeFixedJS("script.js");</script>
+    
+    <script>
+    // Highlight current deployment and add functionality to deployment links
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentHost = window.location.host;
+        const currentPath = window.location.pathname;
+        
+        // Get deployment links
+        const githubLink = document.querySelector('.github-link');
+        const stcLink = document.querySelector('.stc-link');
+        
+        // Highlight current deployment
+        if (currentHost.includes('github.io')) {
+            if (githubLink) {
+                githubLink.style.background = 'rgba(255,255,255,0.4)';
+                githubLink.style.fontWeight = 'bold';
+                githubLink.innerHTML = '📚 GitHub Pages Version (Current)';
+            }
+        } else if (currentHost === 'students.iisertvm.ac.in' && currentPath.startsWith('/stc/')) {
+            if (stcLink) {
+                stcLink.style.background = 'rgba(255,255,255,0.4)';
+                stcLink.style.fontWeight = 'bold';
+                stcLink.innerHTML = '🏫 STC Reverse Proxy Version (Current)';
+            }
+        }
+        
+        // Add copy to clipboard functionality
+        const deploymentContainer = document.querySelector('.deployment-links .container');
+        if (deploymentContainer) {
+            const copyButton = document.createElement('button');
+            copyButton.innerHTML = '📋 Copy Current URL';
+            copyButton.className = 'copy-url-btn';
+            
+            copyButton.onclick = function() {
+                navigator.clipboard.writeText(window.location.href).then(function() {
+                    copyButton.innerHTML = '✅ Copied!';
+                    setTimeout(() => {
+                        copyButton.innerHTML = '📋 Copy Current URL';
+                    }, 2000);
+                }).catch(function() {
+                    // Fallback for older browsers
+                    const textArea = document.createElement('textarea');
+                    textArea.value = window.location.href;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    copyButton.innerHTML = '✅ Copied!';
+                    setTimeout(() => {
+                        copyButton.innerHTML = '📋 Copy Current URL';
+                    }, 2000);
+                });
+            };
+            
+            deploymentContainer.appendChild(copyButton);
+        }
+    });
+    </script>
 </body>
 </html>
