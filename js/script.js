@@ -44,6 +44,23 @@ document.addEventListener("DOMContentLoaded", function() {
             // If we're in pages directory, keep the relative paths as is
         });
 
+        // Fix header links based on current page location
+        const headerRootLinks = document.querySelectorAll('[data-link="root"]');
+        
+        headerRootLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            if (isPagesDirectory && href) {
+                if (href === 'index.html') {
+                    // From pages directory, go up one level to reach index.html
+                    link.setAttribute('href', '../index.html');
+                } else if (href.startsWith('pages/')) {
+                    // From pages directory, remove the 'pages/' prefix
+                    link.setAttribute('href', href.replace('pages/', ''));
+                }
+            }
+            // If we're on the root page, keep the original paths
+        });
+
         // Fix image paths
         document.querySelectorAll('img').forEach(img => {
             const originalSrc = img.getAttribute('src');

@@ -179,7 +179,7 @@ self.addEventListener('fetch', event => {
             // Emergency fallback - let the request go through normally
             if (isHTMLPage(url.pathname) || request.headers.get('accept')?.includes('text/html')) {
                 // For HTML requests, try to serve something useful
-                return caches.match('/') || caches.match('/index.html') || fetch(request);
+                return caches.match(getPath('')) || caches.match(getPath('index.html')) || fetch(request);
             }
             
             // For other requests, let them fail naturally
@@ -233,7 +233,7 @@ async function handleFetch(request) {
             }
             
             // Try to serve homepage from cache
-            const cachedHome = await cache.match('/') || await cache.match('/index.html');
+            const cachedHome = await cache.match(getPath('')) || await cache.match(getPath('index.html'));
             if (cachedHome) {
                 console.log('[SW] Serving cached homepage as fallback');
                 return cachedHome;
@@ -241,14 +241,14 @@ async function handleFetch(request) {
             
             // Try static cache for homepage
             const staticCache = await caches.open(STATIC_CACHE_NAME);
-            const staticHome = await staticCache.match('/') || await staticCache.match('/index.html');
+            const staticHome = await staticCache.match(getPath('')) || await staticCache.match(getPath('index.html'));
             if (staticHome) {
                 console.log('[SW] Serving static cached homepage');
                 return staticHome;
             }
             
             // Finally, try to serve offline page
-            const offlinePage = await staticCache.match('/offline.html');
+            const offlinePage = await staticCache.match(getPath('offline.html'));
             if (offlinePage) {
                 console.log('[SW] Serving offline page');
                 return new Response(await offlinePage.text(), {
@@ -301,7 +301,7 @@ async function handleFetch(request) {
                         <h2>You're Offline</h2>
                         <p>No internet connection detected. Please check your connection and try again.</p>
                         <button class="retry-btn" onclick="window.location.reload()">Retry</button>
-                        <button class="retry-btn" onclick="window.location.href='/'">Go Home</button>
+                        <button class="retry-btn" onclick="window.location.href='./'">Go Home</button>
                     </div>
                 </body>
                 </html>
@@ -375,7 +375,7 @@ async function networkFirst(request, cacheName) {
             
             // If it's an HTML request and we have no cache, try to serve homepage
             if (isHTMLPage(new URL(request.url).pathname)) {
-                const homepage = await cache.match('/') || await cache.match('/index.html');
+                const homepage = await cache.match(getPath('')) || await cache.match(getPath('index.html'));
                 if (homepage) {
                     return homepage;
                 }

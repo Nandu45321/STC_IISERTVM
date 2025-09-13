@@ -130,11 +130,11 @@ class PWADebugger {
         console.group('🔗 Testing Connectivity');
         
         const tests = [
-            { name: 'Homepage', url: '/' },
-            { name: 'Favicon', url: '/favicon-16x16.png' },
-            { name: 'Manifest', url: '/site.webmanifest' },
-            { name: 'Service Worker', url: '/sw.js' },
-            { name: 'CSS', url: '/css/style.css' }
+            { name: 'Homepage', url: './' },
+            { name: 'Favicon', url: './favicon-16x16.png' },
+            { name: 'Manifest', url: './site.webmanifest' },
+            { name: 'Service Worker', url: './sw.js' },
+            { name: 'CSS', url: './css/style.css' }
         ];
         
         for (const test of tests) {
