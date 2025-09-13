@@ -23,43 +23,41 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(html => {
                 navbarContainer.innerHTML = html;
                 
-                // Universal path fixing for navbar (works with GitHub Pages and Reverse Proxy)
+                // Simple and reliable path fixing
+                // Calculate base path from current location to site root
                 const currentPath = window.location.pathname;
                 
-                // Extract just the path portion after the domain
-                const pathSegments = currentPath.split('/').filter(segment => segment && !segment.endsWith('.html'));
-                
-                // Find where 'pages' directory is in the path
-                const pagesIndex = pathSegments.findIndex(segment => segment === 'pages');
-                
-                let pathToRoot = '../'; // Default: one level up from pages directory
-                
-                if (pagesIndex > 0) {
-                    // If pages is not at the root level, we need additional '../' for each level above it
-                    pathToRoot = '../'.repeat(pagesIndex + 1);
+                // Determine site base path by looking at current URL structure
+                let basePath;
+                if (currentPath.includes('/pages/')) {
+                    // Find the part before '/pages/' - this is our site base
+                    const beforePages = currentPath.split('/pages/')[0];
+                    basePath = beforePages === '' ? '/' : beforePages + '/';
+                } else {
+                    basePath = '/';
                 }
                 
-                console.log('Path calculation:', {
+                console.log('Base path detection:', {
                     currentPath,
-                    pathSegments,
-                    pagesIndex,
-                    pathToRoot
+                    basePath
                 });
                 
-                // Fix all navbar links
+                // Convert all navbar links to absolute paths based on detected base
                 const navbarLinks = navbarContainer.querySelectorAll('a[data-navbar-link]');
                 navbarLinks.forEach(link => {
                     const originalHref = link.getAttribute('data-navbar-link');
                     if (originalHref && !originalHref.startsWith('http')) {
                         let newHref;
                         if (originalHref.startsWith('../')) {
-                            // Replace the single '../' with the calculated path to root
-                            newHref = pathToRoot + originalHref.substring(3);
+                            // Links that go to root (like ../index.html)
+                            const fileName = originalHref.substring(3); // Remove '../'
+                            newHref = basePath + fileName;
                         } else {
-                            // Same-level links stay as they are
-                            newHref = originalHref;
+                            // Same-level links (like about.html)
+                            newHref = basePath + 'pages/' + originalHref;
                         }
                         link.setAttribute('href', newHref);
+                        console.log(`Fixed link: ${originalHref} -> ${newHref}`);
                     }
                 });
                 
@@ -70,12 +68,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (originalSrc && !originalSrc.startsWith('http')) {
                         let newSrc;
                         if (originalSrc.startsWith('../')) {
-                            // Replace the single '../' with the calculated path to root
-                            newSrc = pathToRoot + originalSrc.substring(3);
+                            // Images that are in root directories
+                            const imagePath = originalSrc.substring(3); // Remove '../'
+                            newSrc = basePath + imagePath;
                         } else {
-                            newSrc = originalSrc;
+                            newSrc = basePath + 'pages/' + originalSrc;
                         }
                         img.setAttribute('src', newSrc);
+                        console.log(`Fixed image: ${originalSrc} -> ${newSrc}`);
                     }
                 });
                 

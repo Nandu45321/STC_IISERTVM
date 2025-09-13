@@ -4,9 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Leadership - STC IISER TVM</title>
-    <link rel="stylesheet" href="../css/style.css">
+    
+    <!-- Universal path fixer for reverse proxy compatibility -->
+    <script>
+    (function() {
+        'use strict';
+        
+        // Detect site base path for reverse proxy compatibility
+        const currentPath = window.location.pathname;
+        let siteBasePath = '';
+        
+        if (currentPath.includes('/pages/')) {
+            const beforePages = currentPath.split('/pages/')[0];
+            siteBasePath = beforePages === '' ? '' : beforePages;
+        }
+        
+        // Only proceed if we detected a base path (meaning we're in a subdirectory)
+        if (siteBasePath) {
+            console.log('Path fixer: Detected subdirectory deployment, base path:', siteBasePath);
+            
+            // Function to write CSS with corrected paths
+            window.writeFixedCSS = function(originalPath) {
+                const newPath = siteBasePath + '/' + originalPath.substring(3); // Remove '../' and add base
+                document.write('<link rel="stylesheet" href="' + newPath + '">');
+                console.log(`Fixed CSS: ${originalPath} -> ${newPath}`);
+            };
+            
+            window.writeFixedJS = function(originalPath) {
+                const newPath = siteBasePath + '/' + originalPath.substring(3); // Remove '../' and add base  
+                document.write('<script src="' + newPath + '"><\/script>');
+                console.log(`Fixed JS: ${originalPath} -> ${newPath}`);
+            };
+        } else {
+            console.log('Path fixer: Standard deployment detected, no path fixes needed');
+            
+            // Fallback functions for standard deployment
+            window.writeFixedCSS = function(originalPath) {
+                document.write('<link rel="stylesheet" href="' + originalPath + '">');
+            };
+            
+            window.writeFixedJS = function(originalPath) {
+                document.write('<script src="' + originalPath + '"><\/script>');
+            };
+        }
+    })();
+    </script>
+    
+    <script>writeFixedCSS('../css/style.css');</script>
     <link rel="stylesheet" href="navbar.css">
-    <link rel="stylesheet" href="../css/mobile.css">
+    <script>writeFixedCSS('../css/mobile.css');</script>
     <link rel="stylesheet" href="leadership_style.css">
 </head>
 <body>
@@ -165,8 +211,8 @@
         <!-- Footer content is loaded dynamically by js/script.js -->
     </footer>
 
-    <script src="../js/script.js"></script>
-    <script src="../js/mobile-enhancements.js"></script>
+    <script>writeFixedJS('../js/script.js');</script>
+    <script>writeFixedJS('../js/mobile-enhancements.js');</script>
     <script src="script.js"></script>
 </body>
 </html>

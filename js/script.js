@@ -1,6 +1,54 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const isPagesDirectory = window.location.pathname.includes('/pages/');
-    const basePath = isPagesDirectory ? '../' : '';
+    // UNIVERSAL PATH FIXING FOR REVERSE PROXY COMPATIBILITY
+    // Fix CSS and JS paths that are loaded with relative URLs
+    
+    const currentPath = window.location.pathname;
+    let siteBasePath = '/';
+    
+    // Detect site base path for reverse proxy deployments
+    if (currentPath.includes('/pages/')) {
+        const beforePages = currentPath.split('/pages/')[0];
+        siteBasePath = beforePages === '' ? '/' : beforePages + '/';
+    }
+    
+    console.log('Site base path detected:', siteBasePath);
+    
+    // Fix CSS link paths
+    const cssLinks = document.querySelectorAll('link[rel="stylesheet"][href^="../"]');
+    cssLinks.forEach(link => {
+        const originalHref = link.getAttribute('href');
+        const newHref = siteBasePath + originalHref.substring(3); // Remove '../'
+        link.setAttribute('href', newHref);
+        console.log(`Fixed CSS: ${originalHref} -> ${newHref}`);
+    });
+    
+    // Fix script src paths
+    const scriptTags = document.querySelectorAll('script[src^="../"]');
+    scriptTags.forEach(script => {
+        const originalSrc = script.getAttribute('src');
+        const newSrc = siteBasePath + originalSrc.substring(3); // Remove '../'
+        
+        // Create new script element with corrected path
+        const newScript = document.createElement('script');
+        newScript.src = newSrc;
+        
+        // Copy all attributes
+        for (let i = 0; i < script.attributes.length; i++) {
+            const attr = script.attributes[i];
+            if (attr.name !== 'src') {
+                newScript.setAttribute(attr.name, attr.value);
+            }
+        }
+        
+        // Replace old script with new one
+        script.parentNode.insertBefore(newScript, script);
+        script.remove();
+        
+        console.log(`Fixed JS: ${originalSrc} -> ${newSrc}`);
+    });
+
+    // Update basePath calculation to use the same logic
+    const basePath = siteBasePath === '/' ? (isPagesDirectory ? '../' : '') : siteBasePath;
 
     const loadPartial = (selector, url) => {
         const element = document.querySelector(selector);
