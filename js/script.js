@@ -90,20 +90,26 @@ document.addEventListener("DOMContentLoaded", function() {
         console.log('Found footer page links:', footerPageLinks.length);
         
         footerHomeLinks.forEach(link => {
-            if (!isPagesDirectory) {
-                // If we're on the home page, change ../index.html to index.html
-                link.setAttribute('href', 'index.html');
-            }
-            // If we're in pages directory, keep ../index.html
+            // Always use siteBasePath for consistency
+            link.setAttribute('href', `${siteBasePath}index.html`);
+            console.log('Fixed footer home link:', link.getAttribute('href'));
         });
         
         footerPageLinks.forEach(link => {
-            if (!isPagesDirectory) {
-                // If we're on the home page, add pages/ prefix
-                const href = link.getAttribute('href');
-                link.setAttribute('href', `pages/${href}`);
+            const originalHref = link.getAttribute('href');
+            // Always prefix with siteBasePath + pages/
+            link.setAttribute('href', `${siteBasePath}pages/${originalHref}`);
+            console.log('Fixed footer page link:', originalHref, '->', link.getAttribute('href'));
+        });
+
+        // Also fix any other page links that use .page-link class
+        const otherPageLinks = document.querySelectorAll('.page-link');
+        otherPageLinks.forEach(link => {
+            const originalHref = link.getAttribute('href');
+            if (originalHref && !originalHref.startsWith('http') && !originalHref.startsWith('#')) {
+                link.setAttribute('href', `${siteBasePath}pages/${originalHref}`);
+                console.log('Fixed page link:', originalHref, '->', link.getAttribute('href'));
             }
-            // If we're in pages directory, keep the relative paths as is
         });
 
         // Fix header links based on current page location
