@@ -208,16 +208,24 @@ function getOptimizedImageUrl(originalPath) {
     const isSlow = connection && (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g');
     const isSmallScreen = self.screen && self.screen.width <= 768;
     
+    let optimizedPath;
     if (isSlow || isSmallScreen) {
         // Use small version for slow connections or small screens
-        return `${basePath}-small.${extension}`;
+        optimizedPath = `${basePath}-small.${extension}`;
     } else if (self.screen && self.screen.width <= 1024) {
         // Use medium version for tablets/laptops
-        return `${basePath}-medium.${extension}`;
+        optimizedPath = `${basePath}-medium.${extension}`;
     } else {
         // Use large version for desktop
-        return `${basePath}-large.${extension}`;
+        optimizedPath = `${basePath}-large.${extension}`;
     }
+    
+    // Ensure the path doesn't start with double slash
+    if (optimizedPath.startsWith('//')) {
+        optimizedPath = optimizedPath.substring(1);
+    }
+    
+    return optimizedPath;
 }
 
 // Listen for messages from the main thread
