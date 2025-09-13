@@ -15,15 +15,23 @@ document.addEventListener('DOMContentLoaded', function() {
     if (navbarContainer) {
         // Calculate correct path to navbar.html
         const currentPath = window.location.pathname;
-        let navbarPath = 'navbar.html'; // Default for standard deployment
+        const currentHost = window.location.host;
         
-        // For reverse proxy deployments, we might need to adjust the path
-        if (currentPath.includes('/pages/')) {
-            const beforePages = currentPath.split('/pages/')[0];
-            if (beforePages && beforePages !== '') {
-                // We're in a subdirectory, navbar.html should still be in the same pages directory
-                navbarPath = 'navbar.html'; // Keep it relative to current pages directory
-            }
+        // Determine the base path based on deployment
+        let siteBasePath = "/";
+        const isSTCDomain = currentHost === "students.iisertvm.ac.in" && currentPath.startsWith("/stc/");
+        const isSubdirectoryDeployment = currentPath.includes("/STC_IISERTVM/");
+        
+        if (isSTCDomain) {
+            siteBasePath = "/stc/";
+        } else if (isSubdirectoryDeployment) {
+            siteBasePath = "/STC_IISERTVM/";
+        }
+        
+        // Navbar is always in the pages directory
+        let navbarPath = 'navbar.html'; // Default for same directory
+        if (isSTCDomain || isSubdirectoryDeployment) {
+            navbarPath = siteBasePath + 'pages/navbar.html';
         }
         
         console.log('Loading navbar from:', navbarPath);
@@ -45,8 +53,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 const currentPath = window.location.pathname;
                 
                 // Determine site base path by looking at current URL structure
+                const isPagesDirectory = currentPath.includes('/pages/');
                 let basePath;
-                if (currentPath.includes('/pages/')) {
+                if (isPagesDirectory) {
                     // Find the part before '/pages/' - this is our site base
                     const beforePages = currentPath.split('/pages/')[0];
                     basePath = beforePages === '' ? '/' : beforePages + '/';
