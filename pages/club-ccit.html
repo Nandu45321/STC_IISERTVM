@@ -52,6 +52,11 @@
             const newPath = fixPath(originalPath);
             document.write('<script src="' + newPath + '"><\/script>');
         };
+        
+        window.writeFixedImg = function(originalPath, altText) {
+            const newPath = fixPath(originalPath);
+            document.write('<img src="' + newPath + '" alt="' + altText + '">');
+        };
     })();
     </script>
     <meta charset="UTF-8">
@@ -69,7 +74,7 @@
     <main>
         <section class="page-header">
             <div class="container">
-                <img src="../images/logos/connection_network_infinity_half_logo.png" alt="CCIT Club Logo" class="club-logo-header">
+                <script>writeFixedImg("../images/logos/connection_network_infinity_half_logo.png", "CCIT Club Logo");</script>
                 <h1>CCIT</h1>
                 <p>Coding Club of IISER Thiruvananthapuram </p>
             </div>
@@ -101,12 +106,12 @@
             <section id="club-gallery">
                 <h2 class="section-title-sub">Gallery</h2>
                 <div class="gallery-grid-small">
-                    <img src="../images/clubimg/ccit/beyondsyntax2.webp" alt="Beyond Syntax Workshop">
-                    <img src="../images/clubimg/ccit/beyondsytax1.webp" alt="Beyond Syntax Event">
-                    <img src="../images/clubimg/ccit/dl1.webp" alt="Deep Learning Workshop">
-                    <img src="../images/clubimg/ccit/saurabccit.webp" alt="CCIT Club Activity">
-                    <img src="../images/clubimg/ccit/vaivau.webp" alt="Club Member Activity">
-                    <img src="../images/clubimg/ccit/abhinavccit2.webp" alt="CCIT Workshop Session">
+                    <script>writeFixedImg("../images/clubimg/ccit/beyondsyntax2.webp", "Beyond Syntax Workshop");</script>
+                    <script>writeFixedImg("../images/clubimg/ccit/beyondsytax1.webp", "Beyond Syntax Event");</script>
+                    <script>writeFixedImg("../images/clubimg/ccit/dl1.webp", "Deep Learning Workshop");</script>
+                    <script>writeFixedImg("../images/clubimg/ccit/saurabccit.webp", "CCIT Club Activity");</script>
+                    <script>writeFixedImg("../images/clubimg/ccit/vaivau.webp", "Club Member Activity");</script>
+                    <script>writeFixedImg("../images/clubimg/ccit/abhinavccit2.webp", "CCIT Workshop Session");</script>
                 </div>
             </section>
 
