@@ -4,9 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Events - STC IISER TVM</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="navbar.css">
-    <link rel="stylesheet" href="events.css">
+    <script>
+    (function() {
+        const currentPath = window.location.pathname;
+        const isSubdirectory = currentPath.includes("/STC_IISERTVM/") || currentPath.includes("/pages/");
+        const siteBasePath = isSubdirectory ? "/STC_IISERTVM/" : "/";
+        
+        function fixPath(originalPath) {
+            if (originalPath.startsWith("http://") || originalPath.startsWith("https://") || originalPath.startsWith("//")) {
+                return originalPath;
+            }
+            
+            if (originalPath.startsWith("../")) {
+                if (isSubdirectory) {
+                    return siteBasePath + originalPath.substring(3);
+                } else {
+                    return originalPath;
+                }
+            } else if (originalPath.startsWith("./") || !originalPath.startsWith("/")) {
+                if (isSubdirectory) {
+                    return siteBasePath + "pages/" + originalPath.replace("./", "");
+                } else {
+                    return originalPath;
+                }
+            }
+            
+            return originalPath;
+        }
+        
+        window.writeFixedCSS = function(originalPath) {
+            const newPath = fixPath(originalPath);
+            document.write('<link rel="stylesheet" href="' + newPath + '">');
+        };
+        
+        window.writeFixedJS = function(originalPath) {
+            const newPath = fixPath(originalPath);
+            document.write('<script src="' + newPath + '"><\/script>');
+        };
+    })();
+    </script>
+    <script>writeFixedCSS('../css/style.css');</script>
+    <script>writeFixedCSS('navbar.css');</script>
+    <script>writeFixedCSS('events.css');</script>
 </head>
 <body>
     <!-- navbar-->
@@ -53,9 +92,9 @@
         <!-- Footer content is loaded dynamically by js/script.js -->
     </footer>
 
-    <script src="../js/data.js"></script>
-    <script src="../js/script.js"></script>
-    <script src="script.js"></script>
-    <script src="events.js"></script>
+    <script>writeFixedJS('../js/data.js');</script>
+    <script>writeFixedJS('../js/script.js');</script>
+    <script>writeFixedJS('script.js');</script>
+    <script>writeFixedJS('events.js');</script>
 </body>
 </html>
