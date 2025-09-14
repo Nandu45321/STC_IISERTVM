@@ -1,7 +1,7 @@
 // Service Worker for Image Caching and Performance
-const CACHE_NAME = 'stc-gallery-v1';
-const IMAGE_CACHE_NAME = 'stc-images-v1';
-const STATIC_CACHE_NAME = 'stc-static-v1';
+const CACHE_NAME = 'stc-gallery-v2';
+const IMAGE_CACHE_NAME = 'stc-images-v2';
+const STATIC_CACHE_NAME = 'stc-static-v2';
 
 // Assets to cache on install
 const STATIC_ASSETS = [
@@ -15,7 +15,10 @@ const STATIC_ASSETS = [
 
 // Install event - cache static assets
 self.addEventListener('install', event => {
-    console.log('Service Worker installing...');
+    console.log('Service Worker installing... v2 with double slash fix');
+    
+    // Force immediate activation
+    self.skipWaiting();
     
     event.waitUntil(
         caches.open(STATIC_CACHE_NAME)
@@ -35,7 +38,10 @@ self.addEventListener('install', event => {
 
 // Activate event - clean up old caches
 self.addEventListener('activate', event => {
-    console.log('Service Worker activating...');
+    console.log('Service Worker activating... v2 with double slash fix');
+    
+    // Take control of all clients immediately
+    self.clients.claim();
     
     event.waitUntil(
         caches.keys()
@@ -191,6 +197,8 @@ async function handleNetworkFirst(request) {
 
 // Get optimized image URL based on device capabilities
 function getOptimizedImageUrl(originalPath) {
+    console.log('getOptimizedImageUrl input:', originalPath);
+    
     // Don't optimize if already optimized
     if (originalPath.includes('-small') || 
         originalPath.includes('-medium') || 
@@ -203,21 +211,36 @@ function getOptimizedImageUrl(originalPath) {
     const extension = pathParts.pop();
     const basePath = pathParts.join('.');
     
+    console.log('basePath:', basePath, 'extension:', extension);
+    
     // Check if we're on a mobile device or slow connection
     const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
     const isSlow = connection && (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g');
     const isSmallScreen = self.screen && self.screen.width <= 768;
     
+    let optimizedPath;
     if (isSlow || isSmallScreen) {
         // Use small version for slow connections or small screens
-        return `${basePath}-small.${extension}`;
+        optimizedPath = `${basePath}-small.${extension}`;
     } else if (self.screen && self.screen.width <= 1024) {
         // Use medium version for tablets/laptops
-        return `${basePath}-medium.${extension}`;
+        optimizedPath = `${basePath}-medium.${extension}`;
     } else {
         // Use large version for desktop
-        return `${basePath}-large.${extension}`;
+        optimizedPath = `${basePath}-large.${extension}`;
     }
+    
+    console.log('Optimized path before fix:', optimizedPath);
+    
+    // Ensure the path doesn't start with double slash
+    if (optimizedPath.startsWith('//')) {
+        console.log('Found double slash, fixing...');
+        optimizedPath = optimizedPath.substring(1);
+    }
+    
+    console.log('Final optimized path:', optimizedPath);
+    
+    return optimizedPath;
 }
 
 // Listen for messages from the main thread

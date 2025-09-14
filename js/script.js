@@ -3,10 +3,11 @@ document.addEventListener("DOMContentLoaded", function() {
     // Fix CSS and JS paths that are loaded with relative URLs
     
     const currentPath = window.location.pathname;
+    const isPagesDirectory = currentPath.includes('/pages/');
     let siteBasePath = '/';
     
     // Detect site base path for reverse proxy deployments
-    if (currentPath.includes('/pages/')) {
+    if (isPagesDirectory) {
         const beforePages = currentPath.split('/pages/')[0];
         siteBasePath = beforePages === '' ? '/' : beforePages + '/';
     }
@@ -52,16 +53,24 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const loadPartial = (selector, url) => {
         const element = document.querySelector(selector);
+        console.log(`Loading partial: ${selector} from ${url}`);
+        console.log(`Target element found:`, element);
         if (!element) {
+            console.warn(`Element with selector '${selector}' not found`);
             return Promise.resolve(); // Return resolved promise if element doesn't exist
         }
         return fetch(url)
             .then(response => {
+                console.log(`Fetch response for ${url}:`, response.status, response.ok);
                 if (!response.ok) throw new Error(`Could not load ${url}`);
                 return response.text();
             })
             .then(data => {
+                console.log(`Loaded content for ${selector}:`, data.substring(0, 100) + '...');
                 element.innerHTML = data;
+            })
+            .catch(error => {
+                console.error(`Error loading ${selector} from ${url}:`, error);
             });
     };
 
@@ -70,26 +79,37 @@ document.addEventListener("DOMContentLoaded", function() {
         loadPartial('footer', `${basePath}footer.html`)
     ]).then(() => {
         // --- AFTER HEADER/FOOTER ARE LOADED ---
+        console.log('Header and footer loaded successfully');
+        console.log('Footer element content:', document.querySelector('footer').innerHTML);
 
         // Fix footer links based on current page location
         const footerHomeLinks = document.querySelectorAll('.footer-link-home');
         const footerPageLinks = document.querySelectorAll('.footer-link-pages');
         
+        console.log('Found footer home links:', footerHomeLinks.length);
+        console.log('Found footer page links:', footerPageLinks.length);
+        
         footerHomeLinks.forEach(link => {
-            if (!isPagesDirectory) {
-                // If we're on the home page, change ../index.html to index.html
-                link.setAttribute('href', 'index.html');
-            }
-            // If we're in pages directory, keep ../index.html
+            // Always use siteBasePath for consistency
+            link.setAttribute('href', `${siteBasePath}index.html`);
+            console.log('Fixed footer home link:', link.getAttribute('href'));
         });
         
         footerPageLinks.forEach(link => {
-            if (!isPagesDirectory) {
-                // If we're on the home page, add pages/ prefix
-                const href = link.getAttribute('href');
-                link.setAttribute('href', `pages/${href}`);
+            const originalHref = link.getAttribute('href');
+            // Always prefix with siteBasePath + pages/
+            link.setAttribute('href', `${siteBasePath}pages/${originalHref}`);
+            console.log('Fixed footer page link:', originalHref, '->', link.getAttribute('href'));
+        });
+
+        // Also fix any other page links that use .page-link class
+        const otherPageLinks = document.querySelectorAll('.page-link');
+        otherPageLinks.forEach(link => {
+            const originalHref = link.getAttribute('href');
+            if (originalHref && !originalHref.startsWith('http') && !originalHref.startsWith('#')) {
+                link.setAttribute('href', `${siteBasePath}pages/${originalHref}`);
+                console.log('Fixed page link:', originalHref, '->', link.getAttribute('href'));
             }
-            // If we're in pages directory, keep the relative paths as is
         });
 
         // Fix header links based on current page location
@@ -109,10 +129,12 @@ document.addEventListener("DOMContentLoaded", function() {
             // If we're on the root page, keep the original paths
         });
 
-        // Fix image paths
+        // Fix image paths only for relative paths that need fixing
         document.querySelectorAll('img').forEach(img => {
             const originalSrc = img.getAttribute('src');
-            if (isPagesDirectory && !originalSrc.startsWith('http') && !originalSrc.startsWith('../')) {
+            // Only fix relative paths that don't start with ../ and are not already absolute
+            if (originalSrc && isPagesDirectory && !originalSrc.startsWith('http') && 
+                !originalSrc.startsWith('../') && !originalSrc.startsWith('/')) {
                 img.setAttribute('src', `../${originalSrc}`);
             }
         });
